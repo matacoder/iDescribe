@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from faster_whisper import WhisperModel
 
-MODEL_SIZE = "large-v2"
+MODEL_SIZE = "large-v3"
 COMPUTE_TYPE = "float32"
 PROCESSED_LOG = Path.home() / ".voicememos_faster_done.txt"
 
@@ -136,37 +136,34 @@ def get_recent_recordings():
 
 def transcribe_file(file_path: Path, model: WhisperModel):
     print(f"🎙 Transcribing: {file_path.name}")
-    
-    # Get file duration first
-    segments, info = model.transcribe(str(file_path), beam_size=5, language=None, task="transcribe", vad_filter=True)
-    duration = info.duration
-    
-    # Transcribe with progress
+
+    # Transcribe with progress, VAD initially disabled for diagnosis
     segments, info = model.transcribe(
         str(file_path),
         beam_size=5,
         language=None,  # Auto-detect language for each segment
         task="transcribe",
-        vad_filter=True,  # Voice Activity Detection
-        vad_parameters=dict(
-            min_silence_duration_ms=500,  # Minimum silence duration to split segments
-            speech_pad_ms=100,  # Padding around speech segments
-        )
+        vad_filter=False,  # Voice Activity Detection (disabled for now)
+        # vad_parameters=dict(
+        #     min_silence_duration_ms=500,  # Minimum silence duration to split segments
+        #     speech_pad_ms=100,  # Padding around speech segments
+        # )
     )
-    
+    duration = info.duration # Get duration from the single transcribe call
+
     output_text = f"# Duration: {duration:.1f} sec\n\n"
     current_time = 0
-    
+
     for segment in segments:
         # Calculate and show progress
-        progress = (segment.end / duration) * 100
+        progress = (segment.end / duration) * 100 if duration > 0 else 0
         print(f"\r⏳ Progress: {progress:.1f}% ({segment.end:.1f}/{duration:.1f}s)", end="", flush=True)
-        
+
         output_text += f"[{segment.start:.1f} – {segment.end:.1f}] {segment.text.strip()}\n"
         current_time = segment.end
-    
+
     print("\r✅ Transcription complete!      ")  # Extra spaces to clear the progress line
-    
+
     output_path = get_output_path(file_path)
     output_path.write_text(output_text, encoding="utf-8")
     print(f"📝 Saved to: {output_path}")
