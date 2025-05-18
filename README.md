@@ -13,43 +13,46 @@ An automated Python agent that transcribes Voice Memos from iCloud on macOS.
 ## Installation
 
 1. Install Python 3 if not already installed
-2. Install required package:
+2. Install required packages:
    ```bash
-   pip install faster-whisper
+   pip install -r requirements.txt
    ```
 
 ## Setup
 
-1. Copy the Python script to your desired location:
+1. Clone or copy this repository to a convenient folder (e.g., `~/dev/voice-memos-agent`).
+2. Make sure the Python path in `com.user.voicememos.plist` matches your system (default: `/usr/bin/python3` or your venv path).
+3. Install the launch agent for autostart:
    ```bash
-   cp watch_voicememos_faster.py ~/scripts/
+   cp com.user.voicememos.plist ~/Library/LaunchAgents/
+   launchctl load ~/Library/LaunchAgents/com.user.voicememos.plist
    ```
+   The script will now automatically start at login and run in the background.
 
-2. Make sure you have full disk access for Python in System Settings > Privacy & Security > Full Disk Access
+4. Grant Python full disk access:
+   - Open **System Settings → Privacy & Security → Full Disk Access**.
+   - Click "+" and add the path to your Python interpreter (e.g., `/usr/bin/python3` or your venv path).
+   - After adding, restart the script or your computer.
 
 ## Usage
 
-To process the most recent Voice Memo:
+The script will run in the background and automatically process new Voice Memos.
+
+To run manually (for debugging):
 ```bash
 python3 watch_voicememos_faster.py
 ```
 
-The script will:
-1. Find the most recent .m4a file in your Voice Memos
-2. Transcribe it if it hasn't been processed before
-3. Save the transcription to iCloud Drive/Transcribes
-
 ### Output Format
 
 The transcription will be saved as a .txt file with:
-- Language detection
 - Duration of the recording
 - Timestamps for each segment
 - Full text transcription
 
 Example output:
 ```
-# Language: en | Duration: 30.5 sec
+# Duration: 30.5 sec
 
 [0.0 – 5.2] First segment of speech
 [5.2 – 12.8] Second segment of speech
@@ -69,4 +72,10 @@ Example output:
 If you get permission errors:
 1. Make sure Python has full disk access in System Settings
 2. Check that iCloud Drive is enabled and accessible
-3. Verify that you have at least one Voice Memo recording 
+3. Verify that you have at least one Voice Memo recording
+4. Check script logs: `/tmp/voicememos.out` and `/tmp/voicememos.err`
+5. To restart the agent:
+   ```bash
+   launchctl unload ~/Library/LaunchAgents/com.user.voicememos.plist
+   launchctl load ~/Library/LaunchAgents/com.user.voicememos.plist
+   ``` 
