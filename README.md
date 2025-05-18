@@ -1,3 +1,5 @@
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 # Voice Memos Transcription Agent
 
 An automated Python agent that transcribes Voice Memos from iCloud on macOS.
@@ -9,6 +11,16 @@ An automated Python agent that transcribes Voice Memos from iCloud on macOS.
 - Saves transcriptions as .txt files in iCloud Drive/Transcribes
 - Prevents duplicate processing
 - Supports processing of the most recent recording
+
+## Example Output
+
+```
+# Duration: 30.5 sec
+
+[0.0 – 5.2] First segment of speech
+[5.2 – 12.8] Second segment of speech
+...
+```
 
 ## Installation
 
@@ -41,22 +53,6 @@ The script will run in the background and automatically process new Voice Memos.
 To run manually (for debugging):
 ```bash
 python3 watch_voicememos_faster.py
-```
-
-### Output Format
-
-The transcription will be saved as a .txt file with:
-- Duration of the recording
-- Timestamps for each segment
-- Full text transcription
-
-Example output:
-```
-# Duration: 30.5 sec
-
-[0.0 – 5.2] First segment of speech
-[5.2 – 12.8] Second segment of speech
-...
 ```
 
 ## Requirements
