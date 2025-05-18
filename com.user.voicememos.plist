@@ -3,17 +3,29 @@
  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+  <!-- Unique identifier for this launch agent -->
   <key>Label</key>
-  <string>com.user.voicememos</string>
+  <string>com.example.idescribe.voicememos</string>
+
+  <!-- Description for maintainers -->
+  <key>Comment</key>
+  <string>Transcribes new Voice Memos automatically using faster-whisper</string>
+
+  <!-- Command to run: update <your_username> and <your_path> as needed -->
   <key>ProgramArguments</key>
   <array>
-    <string>/Library/Frameworks/Python.framework/Versions/3.10/bin/python3</string>
-    <string>/Users/d.matakov/dev/iDescribe/watch_voicememos_faster.py</string>
+    <string>/usr/bin/python3</string>
+    <string>/Users/&lt;your_username&gt;/&lt;your_path&gt;/watch_voicememos_faster.py</string>
   </array>
+
+  <!-- Start at login -->
   <key>RunAtLoad</key>
   <true/>
+  <!-- Restart if script exits -->
   <key>KeepAlive</key>
   <true/>
+
+  <!-- Log output -->
   <key>StandardOutPath</key>
   <string>/tmp/voicememos.out</string>
   <key>StandardErrorPath</key>

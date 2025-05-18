@@ -30,18 +30,21 @@ An automated Python agent that transcribes Voice Memos from iCloud on macOS.
    pip install -r requirements.txt
    ```
 
-## Setup
+## Automatic Installation
 
-1. Clone or copy this repository to a convenient folder (e.g., `~/dev/voice-memos-agent`).
-2. Make sure the Python path in `com.user.voicememos.plist` matches your system (default: `/usr/bin/python3` or your venv path).
-3. Install the launch agent for autostart:
+To automatically set up the launch agent for background processing:
+
+1. Run the install script from the project directory:
    ```bash
-   cp com.user.voicememos.plist ~/Library/LaunchAgents/
-   launchctl load ~/Library/LaunchAgents/com.user.voicememos.plist
+   bash install_idescribe_agent.sh
    ```
-   The script will now automatically start at login and run in the background.
+   This will:
+   - Detect your username and the absolute path to the script
+   - Generate a personalized launchd plist file
+   - Copy it to `~/Library/LaunchAgents/com.idescribe.voicememos.plist`
+   - Load the agent so it starts at login and runs in the background
 
-4. Grant Python full disk access:
+2. Grant Python full disk access:
    - Open **System Settings → Privacy & Security → Full Disk Access**.
    - Click "+" and add the path to your Python interpreter (e.g., `/usr/bin/python3` or your venv path).
    - After adding, restart the script or your computer.
@@ -72,6 +75,6 @@ If you get permission errors:
 4. Check script logs: `/tmp/voicememos.out` and `/tmp/voicememos.err`
 5. To restart the agent:
    ```bash
-   launchctl unload ~/Library/LaunchAgents/com.user.voicememos.plist
-   launchctl load ~/Library/LaunchAgents/com.user.voicememos.plist
+   launchctl unload ~/Library/LaunchAgents/com.idescribe.voicememos.plist
+   launchctl load ~/Library/LaunchAgents/com.idescribe.voicememos.plist
    ``` 
